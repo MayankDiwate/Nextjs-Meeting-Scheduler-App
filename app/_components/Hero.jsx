@@ -1,23 +1,28 @@
+"use client";
 import { Button } from "@/components/ui/button";
+import { signInWithGoogle } from "@/services/firebase";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Hero = () => {
+  const router = useRouter();
+
   return (
-    <div className="flex flex-col items-center justify-center my-20">
+    <div className="flex flex-col items-center justify-center my-32">
       <div className="hidden md:block">
         <Image
           src="/profile1.png"
           width={100}
           height={100}
-          className="h-[100px] z-[-10] object-cover rounded-full absolute right-20"
+          className="h-[100px] z-[-10] object-cover rounded-full absolute top-24 right-20"
           alt="profile"
         />
         <Image
           src="/profile2.png"
           width={100}
           height={100}
-          className="h-[100px] z-[-10] object-cover rounded-full absolute top-60 left-24"
+          className="h-[100px] z-[-10] object-cover rounded-full absolute top-40 left-24"
           alt="profile"
         />
         <Image
@@ -44,20 +49,17 @@ const Hero = () => {
           back-and-forth emails to find the perfect time -- and so much more
         </h2>
         <div className="flex gap-4 flex-col mt-5">
-          <h3>Sign Up free with Google and Facebook</h3>
           <div className="flex justify-center gap-8 ">
-            <Button className="flex items-center gap-2">
+            <Button
+              className="flex items-center gap-2"
+              onClick={async () => {
+                await signInWithGoogle().then((res) => {
+                  router.replace("/dashboard");
+                });
+              }}
+            >
               <Image src="/google.png" width={25} height={25} alt="google" />
               <span>Sign Up with Google</span>
-            </Button>
-            <Button className="flex items-center gap-2">
-              <Image
-                src="/facebook.png"
-                width={25}
-                height={25}
-                alt="facebook"
-              />
-              <span>Sign Up with Facebook</span>
             </Button>
           </div>
         </div>
@@ -65,7 +67,7 @@ const Hero = () => {
         <h3>
           Already have an account?{" "}
           <Link href="/login">
-            <span>Log in</span>
+            <span className="hover:text-primary hover:underline">Log in</span>
           </Link>
         </h3>
       </div>

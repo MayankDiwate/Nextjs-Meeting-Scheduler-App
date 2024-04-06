@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/sonner";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 
@@ -11,7 +12,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={outfit.className}>{children}</body>
+      <body className={outfit.className}>
+        <main>{children}</main>
+        <Toaster />
+      </body>
     </html>
   );
 }

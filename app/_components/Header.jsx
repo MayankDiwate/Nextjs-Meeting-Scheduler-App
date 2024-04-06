@@ -1,4 +1,6 @@
+"use client";
 import { Button } from "@/components/ui/button";
+import { signInWithGoogle } from "@/services/firebase";
 import Image from "next/image";
 
 const Header = () => {
@@ -28,7 +30,12 @@ const Header = () => {
         </li>
       </ul>
       <div className="flex gap-5">
-        <Button variant="ghost" size="icon" className="w-10 h-10">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="w-10 h-10"
+          onClick={() => signInWithGoogle()}
+        >
           Login
         </Button>
 
