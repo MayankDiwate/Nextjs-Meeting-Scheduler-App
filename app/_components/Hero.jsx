@@ -8,6 +8,12 @@ import { useRouter } from "next/navigation";
 const Hero = () => {
   const router = useRouter();
 
+  const handleSignInWithGoogle = async () => {
+    await signInWithGoogle().then((_) => {
+      router.push("/dashboard");
+    });
+  };
+
   return (
     <div className="flex flex-col items-center justify-center my-32">
       <div className="hidden md:block">
@@ -52,11 +58,7 @@ const Hero = () => {
           <div className="flex justify-center gap-8 ">
             <Button
               className="flex items-center gap-2"
-              onClick={async () => {
-                await signInWithGoogle().then((res) => {
-                  router.replace("/dashboard");
-                });
-              }}
+              onClick={handleSignInWithGoogle}
             >
               <Image src="/google.png" width={25} height={25} alt="google" />
               <span>Sign Up with Google</span>

@@ -1,11 +1,22 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { signInWithGoogle } from "@/services/firebase";
+import { auth, signInWithGoogle } from "@/services/firebase";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Header = () => {
+  const [user] = useAuthState(auth);
+  const router = useRouter();
+
+  const handleSignInWithGoogle = async () => {
+    await signInWithGoogle().then((_) => {
+      router.push("/dashboard");
+    });
+  };
+
   return (
-    <div className="flex items-center justify-between p-5 shadow-md">
+    <div className="flex items-center justify-between p-5">
       <div>
         <Image
           src="/logo.svg"
@@ -29,17 +40,31 @@ const Header = () => {
           About Us
         </li>
       </ul>
-      <div className="flex gap-5">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="w-10 h-10"
-          onClick={() => signInWithGoogle()}
-        >
-          Login
-        </Button>
+      <div className="flex items-center gap-3">
+        {user ? (
+          <Button onClick={() => router.push("/dashboard")}>Dashboard</Button>
+        ) : (
+          <Button onClick={handleSignInWithGoogle}>Get Started</Button>
+        )}
 
-        <Button>Get Started</Button>
+        {user ? (
+          <Image
+            src={user?.photoURL}
+            width={50}
+            height={50}
+            className="h-8 w-8 object-cover rounded-full"
+            alt="profile"
+          />
+        ) : (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="w-14 h-10"
+            onClick={handleSignInWithGoogle}
+          >
+            Login
+          </Button>
+        )}
       </div>
     </div>
   );
