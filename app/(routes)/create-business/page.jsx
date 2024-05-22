@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { auth, db } from "@/services/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import Image from "next/image";
@@ -36,19 +38,19 @@ const CreateBusiness = () => {
         </p>
         <div className="w-full">
           <label className="text-slate-400">Team Name</label>
-          {/* <Input
+          <Input
             placeholder="Ex. My Business"
             className="mt-2"
             onChange={(event) => setBusinessName(event.target.value)}
-          /> */}
+          />
         </div>
-        {/* <Button
+        <Button
           className="w-full"
           // disabled={!businessName}
           onClick={onCreateBusiness}
         >
           Create Business
-        </Button> */}
+        </Button>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import { auth, signInWithGoogle } from "@/services/firebase";
 import Image from "next/image";
