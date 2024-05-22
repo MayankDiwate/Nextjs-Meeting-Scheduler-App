@@ -16,12 +16,12 @@ const CreateBusiness = () => {
   const router = useRouter();
 
   const onCreateBusiness = async () => {
-    await setDoc(doc(db, "Business", user.email), {
+    await setDoc(doc(db, "Business", user.uid), {
       businessName: businessName.replace(" ", "_"),
       email: user.email,
-      userName: user.given_name + " " + user.family_name,
+      userName: user.displayName,
     }).then((_) => {
-      toast("New Business Created!");
+      toast.success("New Business Created!");
       router.replace("/dashboard");
     });
   };
@@ -46,7 +46,7 @@ const CreateBusiness = () => {
         </div>
         <Button
           className="w-full"
-          // disabled={!businessName}
+          disabled={!businessName}
           onClick={onCreateBusiness}
         >
           Create Business

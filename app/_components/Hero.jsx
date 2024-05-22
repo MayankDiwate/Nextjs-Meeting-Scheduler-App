@@ -1,11 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { signInWithGoogle } from "@/services/firebase";
+import { auth, signInWithGoogle } from "@/services/firebase";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Hero = () => {
+  const [user] = useAuthState(auth);
   const router = useRouter();
 
   const handleSignInWithGoogle = async () => {
@@ -54,24 +56,38 @@ const Hero = () => {
           Scheduly is your scheduling automation platform for eliminating the
           back-and-forth emails to find the perfect time -- and so much more
         </h2>
-        <div className="flex gap-4 flex-col mt-5">
-          <div className="flex justify-center gap-8 ">
-            <Button
-              className="flex items-center gap-2"
-              onClick={handleSignInWithGoogle}
-            >
-              <Image src="/google.png" width={25} height={25} alt="google" />
-              <span>Sign Up with Google</span>
-            </Button>
+
+        {user ? (
+          <Button className="mt-5" onClick={() => router.push("/dashboard")}>Dashboard</Button>
+        ) : (
+          <div>
+            <div className="flex gap-4 flex-col mt-5">
+              <div className="flex justify-center gap-8 ">
+                <Button
+                  className="flex items-center gap-2"
+                  onClick={handleSignInWithGoogle}
+                >
+                  <Image
+                    src="/google.png"
+                    width={25}
+                    height={25}
+                    alt="google"
+                  />
+                  <span>Sign Up with Google</span>
+                </Button>
+              </div>
+            </div>
+            <hr className="mt-4 mb-2" />
+            <h3>
+              Already have an account?{" "}
+              <Link href="/login">
+                <span className="hover:text-primary hover:underline">
+                  Log in
+                </span>
+              </Link>
+            </h3>
           </div>
-        </div>
-        <hr className="mt-4 mb-2" />
-        <h3>
-          Already have an account?{" "}
-          <Link href="/login">
-            <span className="hover:text-primary hover:underline">Log in</span>
-          </Link>
-        </h3>
+        )}
       </div>
     </div>
   );

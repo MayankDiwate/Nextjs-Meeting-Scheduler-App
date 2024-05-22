@@ -5,6 +5,7 @@ import { auth, signInWithGoogle } from "@/services/firebase";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
+import AvatarMenu from "./AvatarMenu";
 
 const Header = () => {
   const [user] = useAuthState(auth);
@@ -42,29 +43,21 @@ const Header = () => {
         </li>
       </ul>
       <div className="flex items-center gap-3">
-        {user ? (
-          <Button onClick={() => router.push("/dashboard")}>Dashboard</Button>
-        ) : (
-          <Button onClick={handleSignInWithGoogle}>Get Started</Button>
-        )}
-
-        {user ? (
-          <Image
-            src={user?.photoURL}
-            width={50}
-            height={50}
-            className="h-8 w-8 object-cover rounded-full"
-            alt="profile"
-          />
-        ) : (
+        {!user &&
           <Button
-            variant="ghost"
-            size="icon"
-            className="w-14 h-10"
+          variant="ghost"
+          size="icon"
+          className="w-14 h-10"
             onClick={handleSignInWithGoogle}
           >
             Login
           </Button>
+        }
+
+        {user ? (
+          <AvatarMenu />
+        ) : (
+          <Button onClick={handleSignInWithGoogle}>Get Started</Button>
         )}
       </div>
     </div>
