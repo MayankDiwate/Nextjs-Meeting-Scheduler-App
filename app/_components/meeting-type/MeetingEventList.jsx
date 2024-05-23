@@ -6,8 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { app } from "@/config/FirebaseConfig";
-import { auth } from "@/services/firebase";
+import { app, auth } from "@/services/firebase";
 import {
   collection,
   deleteDoc,
@@ -61,25 +60,16 @@ function MeetingEventList() {
   };
 
   const onCopyClickHandler = (event) => {
-    const meetingEventUrl =
-      process.env.NEXT_PUBLIC_BASE_URL +
-      "/" +
-      businessInfo.businessName +
-      "/" +
-      event.id;
-    navigator.clipboard.writeText(meetingEventUrl);
-    toast("Copied to Clicpboard");
+    navigator.clipboard.writeText(event);
+    toast("Copied to Clipboard");
   };
   return (
-    <div
-      className="mt-10 grid grid-cols-1 md:grid-cols-2 
-        lg:grid-cols-3 gap-7"
-    >
-      {eventList.length > 0 ? (
+    <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+      {eventList && eventList.length > 0 ? (
         eventList?.map((event, index) => (
           <div
-            className="border shadow-md 
-                border-t-8 rounded-lg p-5 flex flex-col gap-3"
+            key={index}
+            className="border shadow-md border-t-8 rounded-lg p-5 flex flex-col gap-3"
             style={{ borderTopColor: event?.themeColor }}
           >
             <div className="flex justify-end">
@@ -105,10 +95,10 @@ function MeetingEventList() {
             <h2 className="font-medium text-xl">{event?.eventName}</h2>
             <div className="flex justify-between">
               <h2 className="flex gap-2 text-gray-500">
-                <Clock /> {event.duration} Min{" "}
+                <Clock /> {event.duration} Min
               </h2>
               <h2 className="flex gap-2 text-gray-500">
-                <MapPin /> {event.locationType} Min{" "}
+                <MapPin /> {event.locationType}
               </h2>
             </div>
             <hr></hr>
@@ -117,10 +107,10 @@ function MeetingEventList() {
                 className="flex gap-2 text-sm text-primary 
                     items-center cursor-pointer"
                 onClick={() => {
-                  onCopyClickHandler(event);
+                  onCopyClickHandler(event.locationUrl);
                 }}
               >
-                <Copy className="h-4 w-4" /> Copy Link{" "}
+                <Copy className="h-4 w-4" /> Copy Link
               </h2>
               <Button
                 variant="outline"
@@ -132,7 +122,9 @@ function MeetingEventList() {
           </div>
         ))
       ) : (
-        <h2>Loading...</h2>
+        <div className="flex items-center justify-center w-full">
+          No meetings added yet.
+        </div>
       )}
     </div>
   );

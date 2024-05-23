@@ -1,5 +1,7 @@
 "use client";
 
+import MeetingEventList from "@/app/_components/meeting-type/MeetingEventList";
+import { Input } from "@/components/ui/input";
 import { auth, db } from "@/services/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
@@ -11,7 +13,7 @@ const Dashboard = () => {
   const router = useRouter();
 
   const isBusinessRegistered = async () => {
-    const docRef = doc(db, "Business", user.uid);
+    const docRef = doc(db, "Business", user?.uid);
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) router.replace("/create-business");
@@ -34,8 +36,13 @@ const Dashboard = () => {
   }
 
   return (
-    <div>
-      <h1>Meeting Type</h1>
+    <div className="p-5">
+      <div className="flex flex-col gap-5">
+        <h2 className="font-bold text-3xl">Meeting Event Type</h2>
+        <Input placeholder="Search" className="max-w-xs " />
+        <hr></hr>
+      </div>
+      <MeetingEventList />
     </div>
   );
 };
