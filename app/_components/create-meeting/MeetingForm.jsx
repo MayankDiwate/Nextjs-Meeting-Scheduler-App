@@ -19,7 +19,7 @@ import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { toast } from "sonner";
 
-function MeetingForm({ formValue, setFormValue }) {
+function MeetingForm({ setFormValue }) {
   const [location, setLocation] = useState();
   const [themeColor, setThemeColor] = useState("");
   const [eventName, setEventName] = useState();
@@ -35,8 +35,6 @@ function MeetingForm({ formValue, setFormValue }) {
       locationType: locationType,
       locationUrl: locationUrl,
       themeColor: themeColor,
-      time: formValue?.time,
-      date: formValue?.date,
     });
   }, [eventName, duration, locationType, locationUrl, themeColor]);
 
@@ -44,7 +42,11 @@ function MeetingForm({ formValue, setFormValue }) {
     const id = Date.now().toString();
     await setDoc(doc(db, "MeetingEvent", id), {
       id: id,
-      ...formValue,
+      eventName: eventName,
+      duration: duration,
+      locationType: locationType,
+      locationUrl: locationUrl,
+      themeColor: themeColor,
       businessId: doc(db, "Business", user?.uid),
       createdBy: user?.email,
     });

@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-function PreviewMeeting({ formValue, setFormValue }) {
+function PreviewMeeting({ formValue }) {
   const [date, setDate] = useState(new Date());
   const [timeSlots, setTimeSlots] = useState();
   const [timeSlot, setTimeSlot] = useState();
@@ -31,13 +31,8 @@ function PreviewMeeting({ formValue, setFormValue }) {
     setTimeSlot(slots[0]);
   };
 
-    useEffect(() => {
+  useEffect(() => {
     formValue?.duration && createTimeSlot(formValue?.duration);
-    setFormValue({
-      ...formValue,
-      date,
-      time: timeSlot,
-    });
   }, [formValue?.duration]);
 
   return (
