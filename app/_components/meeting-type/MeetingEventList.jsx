@@ -45,9 +45,9 @@ function MeetingEventList() {
       setEventList((prevEvent) => [...prevEvent, doc.data()]);
     });
   };
-
+  
   const BusinessInfo = async () => {
-    const docRef = doc(db, "Business", user.email);
+    const docRef = doc(db, "Business", user?.uid);
     const docSnap = await getDoc(docRef);
     setBusinessInfo(docSnap.data());
   };
@@ -60,9 +60,16 @@ function MeetingEventList() {
   };
 
   const onCopyClickHandler = (event) => {
-    navigator.clipboard.writeText(event);
-    toast("Copied to Clipboard");
+    const meetingEventUrl =
+      process.env.NEXT_PUBLIC_BASE_URL +
+      "/" +
+      businessInfo?.businessName +
+      "/" +
+      event.id;
+    navigator.clipboard.writeText(meetingEventUrl);
+    toast("Copied to Clicpboard");
   };
+
   return (
     <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
       {eventList && eventList.length > 0 ? (
@@ -107,7 +114,7 @@ function MeetingEventList() {
                 className="flex gap-2 text-sm text-primary 
                     items-center cursor-pointer"
                 onClick={() => {
-                  onCopyClickHandler(event.locationUrl);
+                  onCopyClickHandler(event);
                 }}
               >
                 <Copy className="h-4 w-4" /> Copy Link
