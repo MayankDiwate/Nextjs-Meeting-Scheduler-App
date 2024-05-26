@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { db } from "@/services/firebase";
 import { format } from "date-fns";
 import { doc, setDoc } from "firebase/firestore";
@@ -9,6 +10,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import TimeDateSelection from "./TimeDateSelection";
+import UserFormInfo from "./UserFormInfo";
 function MeetingTimeDateSelection({ meetingInfo, businessInfo }) {
   const [date, setDate] = useState(new Date());
   const [timeSlots, setTimeSlots] = useState();
@@ -39,7 +42,6 @@ function MeetingTimeDateSelection({ meetingInfo, businessInfo }) {
       ).padStart(2, "0")} ${period}`;
     });
 
-    console.log(slots);
     setTimeSlots(slots);
   };
 
@@ -123,6 +125,48 @@ function MeetingTimeDateSelection({ meetingInfo, businessInfo }) {
             </Link>
           </div>
         </div>
+
+        {/* Time & Date selection */}
+        {step == 1 ? (
+          <TimeDateSelection
+            date={date}
+            enableTimeSlot={enableTimeSlot}
+            handleDateChange={handleDateChange}
+            setSelectedTime={setSelectedTime}
+            timeSlots={timeSlots}
+            selectedTime={selectedTime}
+            prevBooking={prevBooking}
+          />
+        ) : (
+          <UserFormInfo
+            setUserName={setUserName}
+            setUserEmail={setUserEmail}
+            setUserNote={setUserNote}
+          />
+        )}
+      </div>
+      <div className="flex gap-3 justify-end">
+        {step == 2 && (
+          <Button variant="outline" onClick={() => setStep(1)}>
+            Back
+          </Button>
+        )}
+        {step == 1 ? (
+          <Button
+            className="mt-10 float-right"
+            disabled={!selectedTime || !date}
+            onClick={() => setStep(step + 1)}
+          >
+            Next
+          </Button>
+        ) : (
+          <Button
+            disabled={!userEmail || !userName}
+            onClick={handleScheduleEvent}
+          >
+            {loading ? <LoaderIcon className="animate-spin" /> : "Schedule"}
+          </Button>
+        )}
       </div>
     </div>
   );
