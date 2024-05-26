@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { db } from "@/services/firebase";
 import { format } from "date-fns";
-import { doc, setDoc } from "firebase/firestore";
-import { CalendarCheck, Clock, MapPin, Timer } from "lucide-react";
+import { collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
+import { CalendarCheck, Clock, LoaderIcon, MapPin, Timer } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -48,7 +48,7 @@ function MeetingTimeDateSelection({ meetingInfo, businessInfo }) {
   const handleDateChange = (date) => {
     setDate(date);
     const day = format(date, "EEEE");
-    if (businessInfo?.daysAvailable?.[day]) {
+    if (businessInfo?.availableDays?.[day]) {
       getPrevEventBooking(date);
       setEnabledTimeSlot(true);
     } else {
@@ -78,9 +78,22 @@ function MeetingTimeDateSelection({ meetingInfo, businessInfo }) {
       userName: userName,
       userEmail: userEmail,
       userNote: userNote,
-    }).then((resp) => {
+    }).then((_) => {
       toast("Meeting Scheduled successfully!");
-      sendEmail(userName);
+    });
+  };
+
+  const getPrevEventBooking = async (date_) => {
+    const q = query(
+      collection(db, "ScheduledMeetings"),
+      where("selectedDate", "==", date_),
+      where("eventId", "==", meetingInfo.id)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      setPrevBooking((prev) => [...prev, doc.data()]);
     });
   };
 

@@ -22,7 +22,7 @@ function TimeDateSelection({
           selected={date}
           onSelect={(d) => handleDateChange(d)}
           className="rounded-md border mt-5"
-          disabled={(date) => date <= new Date()}
+          disabled={(date) => date < new Date()}
         />
       </div>
       <div
@@ -31,11 +31,12 @@ function TimeDateSelection({
       >
         {timeSlots?.map((time, index) => (
           <Button
+            key={index}
             disabled={!enableTimeSlot || checkTimeSlot(time)}
             onClick={() => setSelectedTime(time)}
             className={`border-primary
              text-primary
-             ${time == selectedTime && "bg-primary text-white"}
+             ${time == selectedTime && "bg-primary text-white hover:bg-primary hover:text-white"}
              `}
             variant="outline"
           >

@@ -18,7 +18,7 @@ const Header = () => {
   };
 
   return (
-    <div className="flex items-center justify-between p-5">
+    <div className="flex items-center justify-between p-5 max-w-7xl mx-auto">
       <div>
         <Image
           src="/logo.svg"
