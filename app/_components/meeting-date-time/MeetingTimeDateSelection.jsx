@@ -3,7 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { db } from "@/services/firebase";
 import { format } from "date-fns";
-import { collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import { CalendarCheck, Clock, LoaderIcon, MapPin, Timer } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -73,7 +80,7 @@ function MeetingTimeDateSelection({ meetingInfo, businessInfo }) {
       formatedTimeStamp: format(date, "t"),
       duration: meetingInfo.duration,
       locationUrl: meetingInfo.locationUrl,
-      eventId: meetingInfo.id,
+      meetingId: meetingInfo.id,
       id: docId,
       userName: userName,
       userEmail: userEmail,
@@ -87,7 +94,7 @@ function MeetingTimeDateSelection({ meetingInfo, businessInfo }) {
     const q = query(
       collection(db, "ScheduledMeetings"),
       where("selectedDate", "==", date_),
-      where("eventId", "==", meetingInfo.id)
+      where("meetingId", "==", meetingInfo.id)
     );
 
     const querySnapshot = await getDocs(q);
