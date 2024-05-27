@@ -1,11 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { app, auth } from "@/services/firebase";
 import {
   collection,
@@ -18,7 +12,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { Clock, Copy, MapPin, Pen, Settings, Trash } from "lucide-react";
+import { Clock, Copy, MapPin, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { toast } from "sonner";
@@ -45,7 +39,7 @@ function MeetingEventList() {
       setEventList((prevEvent) => [...prevEvent, doc.data()]);
     });
   };
-  
+
   const BusinessInfo = async () => {
     const docRef = doc(db, "Business", user?.uid);
     const docSnap = await getDoc(docRef);
@@ -61,7 +55,7 @@ function MeetingEventList() {
 
   const onCopyClickHandler = (event) => {
     const meetingEventUrl =
-      process.env.NEXT_PUBLIC_BASE_URL +
+      window.location.origin +
       "/" +
       businessInfo?.businessName +
       "/" +
@@ -80,8 +74,12 @@ function MeetingEventList() {
             style={{ borderTopColor: event?.themeColor }}
           >
             <div className="flex justify-between items-center">
-            <h2 className="font-medium text-xl">{event?.eventName}</h2>
-              <Trash size={18} onClick={() => onDeleteMeetingEvent(event)} className="cursor-pointer"/>
+              <h2 className="font-medium text-xl">{event?.eventName}</h2>
+              <Trash
+                size={18}
+                onClick={() => onDeleteMeetingEvent(event)}
+                className="cursor-pointer"
+              />
             </div>
             <div className="flex justify-between">
               <h2 className="flex gap-2 text-gray-500">
