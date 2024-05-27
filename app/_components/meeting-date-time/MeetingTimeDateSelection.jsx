@@ -2,6 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { db } from "@/services/firebase";
+import Plunk from "@plunk/node";
+import { render } from "@react-email/render";
 import { format } from "date-fns";
 import {
   collection,
@@ -19,6 +21,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import TimeDateSelection from "./TimeDateSelection";
 import UserFormInfo from "./UserFormInfo";
+import Email from "@/emails";
 function MeetingTimeDateSelection({ meetingInfo, businessInfo }) {
   const [date, setDate] = useState(new Date());
   const [timeSlots, setTimeSlots] = useState();
@@ -29,6 +32,7 @@ function MeetingTimeDateSelection({ meetingInfo, businessInfo }) {
   const [userNote, setUserNote] = useState("");
   const [prevBooking, setPrevBooking] = useState([]);
   const [step, setStep] = useState(1);
+  const plunk = new Plunk(process.env.NEXT_PUBLIC_PLUNK_API_KEY);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -50,6 +54,30 @@ function MeetingTimeDateSelection({ meetingInfo, businessInfo }) {
     });
 
     setTimeSlots(slots);
+  };
+
+  const sendEmail = (user) => {
+    const emailHtml = render(
+      <Email
+        businessName={businessInfo?.businessName}
+        date={format(date, "PPP").toString()}
+        duration={meetingInfo?.duration}
+        meetingTime={selectedTime}
+        meetingUrl={meetingInfo.locationUrl}
+        userFirstName={user}
+      />
+    );
+
+    plunk.emails
+      .send({
+        to: userEmail,
+        subject: "Meeting Schedule Details",
+        body: emailHtml,
+      })
+      .then((resp) => {
+        setLoading(false);
+        router.replace("/confirmation");
+      });
   };
 
   const handleDateChange = (date) => {
@@ -87,6 +115,7 @@ function MeetingTimeDateSelection({ meetingInfo, businessInfo }) {
       userNote: userNote,
     }).then((_) => {
       toast("Meeting Scheduled successfully!");
+      sendEmail(userName);
     });
   };
 
