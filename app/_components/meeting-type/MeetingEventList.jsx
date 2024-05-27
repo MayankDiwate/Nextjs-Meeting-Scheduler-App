@@ -79,27 +79,10 @@ function MeetingEventList() {
             className="border shadow-md border-t-8 rounded-lg p-5 flex flex-col gap-3"
             style={{ borderTopColor: event?.themeColor }}
           >
-            <div className="flex justify-end">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Settings className="cursor-pointer" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem className="flex gap-2">
-                    {" "}
-                    <Pen /> Edit
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    className="flex gap-2"
-                    onClick={() => onDeleteMeetingEvent(event)}
-                  >
-                    {" "}
-                    <Trash /> Delete
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+            <div className="flex justify-between items-center">
             <h2 className="font-medium text-xl">{event?.eventName}</h2>
+              <Trash size={18} onClick={() => onDeleteMeetingEvent(event)} className="cursor-pointer"/>
+            </div>
             <div className="flex justify-between">
               <h2 className="flex gap-2 text-gray-500">
                 <Clock /> {event.duration} Min

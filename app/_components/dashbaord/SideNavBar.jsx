@@ -37,12 +37,7 @@ function SideNavBar() {
           <Link href={item.path} key={index}>
             <Button
               variant="ghost"
-              className={`w-full flex gap-2 
-                        justify-start
-                        hover:bg-blue-100
-                        hover:text-primary
-                        font-normal
-                        text-lg
+              className={`w-full flex gap-2 justify-start hover:bg-blue-100 hover:text-primary font-normal text-lg
                         ${activePath == item.path && "text-primary bg-blue-100"}
                         `}
             >
