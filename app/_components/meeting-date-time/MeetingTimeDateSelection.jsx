@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import Email from "@/emails";
 import { db } from "@/services/firebase";
 import Plunk from "@plunk/node";
 import { render } from "@react-email/render";
@@ -21,7 +22,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import TimeDateSelection from "./TimeDateSelection";
 import UserFormInfo from "./UserFormInfo";
-import Email from "@/emails";
 function MeetingTimeDateSelection({ meetingInfo, businessInfo }) {
   const [date, setDate] = useState(new Date());
   const [timeSlots, setTimeSlots] = useState();
@@ -40,7 +40,7 @@ function MeetingTimeDateSelection({ meetingInfo, businessInfo }) {
   }, [meetingInfo]);
   const createTimeSlot = (interval) => {
     const startTime = 8 * 60; // 8 AM in minutes
-    const endTime = 22 * 60; // 10 PM in minutes
+    const endTime = 23 * 60; // 12 PM in minutes
     const totalSlots = (endTime - startTime) / interval;
     const slots = Array.from({ length: totalSlots }, (_, i) => {
       const totalMinutes = startTime + i * interval;
@@ -83,7 +83,7 @@ function MeetingTimeDateSelection({ meetingInfo, businessInfo }) {
   const handleDateChange = (date) => {
     setDate(date);
     const day = format(date, "EEEE");
-    if (businessInfo?.availableDays?.[day]) {
+    if (businessInfo?.availableDays?.[day] - 1 * 1000 * 60 * 60 * 24) {
       getPrevEventBooking(date);
       setEnabledTimeSlot(true);
     } else {
